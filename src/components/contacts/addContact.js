@@ -1,8 +1,9 @@
 import React, { useState }  from 'react'
 import { Consumer } from '../../context'
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios'
 
-
+let url = 'https://jsonplaceholder.typicode.com/users'
 
 const AddContact = (props) => {
 
@@ -10,7 +11,6 @@ const AddContact = (props) => {
     name: '',
     email: '',
     phone: '',
-    errors:{}
   });
 
 
@@ -21,7 +21,7 @@ const AddContact = (props) => {
   }
 
 
-  const handleSubmit = (dispatch, e,) => {
+  const handleSubmit = (dispatch, e) => {
     e.preventDefault();
 
     const { name, email, phone } = inputContact;
@@ -32,7 +32,12 @@ const AddContact = (props) => {
       email,
       phone
     };
-    dispatch({ type: 'ADD_CONTACT', payload: newContact });
+
+    axios.post(url, newContact)
+    .then(res => dispatch({ type: 'ADD_CONTACT', payload: res.data}))
+  
+
+    // dispatch({ type: 'ADD_CONTACT', payload: newContact });
 
     setInputContact({
       name: '',
@@ -41,6 +46,32 @@ const AddContact = (props) => {
     })
     props.history.push('/');
   }
+
+  // const handleSubmit = async (dispatch, e) => {
+  //   e.preventDefault();
+
+  //   const { name, email, phone } = inputContact;
+
+  //   const newContact = {
+  //     id: uuidv4(),
+  //     name,
+  //     email,
+  //     phone
+  //   };
+
+  //   const res = await axios.post(url, newContact);
+  //     dispatch({ type: 'ADD_CONTACT', payload: res.data })
+
+
+  //   // dispatch({ type: 'ADD_CONTACT', payload: newContact });
+
+  //   setInputContact({
+  //     name: '',
+  //     email: '',
+  //     phone: '',
+  //   })
+  //   props.history.push('/');
+  // }
 
   return (
     <Consumer>

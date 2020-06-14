@@ -1,4 +1,5 @@
-import React,{ useState } from 'react'
+import React, { useState } from 'react'
+// import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { Consumer } from '../../context'
 
@@ -8,11 +9,27 @@ const Contact = (props) => {
   const showContact = (e) => {
     setShowContactInfo(!showContactInfo);
   }
+  
+  let url = 'https://jsonplaceholder.typicode.com/users'
 
   const deleteContact = (id, dispatch) => {
-    dispatch({type: 'DELETE_CONTACT', payload: id});
-  }
 
+    fetch(url+"/"+id, {
+      method: 'DELETE',
+    })
+      .then(data => dispatch({ type: 'DELETE_CONTACT', payload: id }))
+    }
+
+  
+
+  // const deleteContact = async (id, dispatch) => {
+
+  //   await fetch(url + "/" + id, {
+  //     method: 'DELETE',
+  //   });
+  //   dispatch({ type: 'DELETE_CONTACT', payload: id })
+  // }
+  
   return (
     <Consumer>
       {value => {
@@ -26,6 +43,16 @@ const Contact = (props) => {
                <i onClick={(e) => deleteContact( id, dispatch)}
                 className="fa fa-trash" style={{ cursor: 'pointer', float: 'right', color: 'red' }}
               />
+              {/* <Link to={`contact/edit/${id}`}>
+                <i
+                  className="fa fa-pencil"
+                  style={{
+                    cursor: 'pointer',
+                    float: 'right',
+                    marginRight: '1rem'
+                  }}
+                />
+              </Link> */}
             </h4> 
             {showContactInfo ? (<ul className="list-group">
               <li className="list-group-item">Email: {email}</li>

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 const Context = React.createContext();
 
+let url = 'https://jsonplaceholder.typicode.com/users'
+
 const reducer = (state, action) => {
   switch (action.type) {
     case 'DELETE_CONTACT':
@@ -21,35 +23,43 @@ const reducer = (state, action) => {
   }
 };
 
+// let isLoading = ()=> {
+//   console.log("loading!!")
+// }
+
+
+
 export class Provider extends Component {
   constructor() {
     super();
     this.state = {
-      contacts: [
-        {
-          id: 1,
-          name: "Teslim Kazeem",
-          email: "teslim@gmail.com",
-          phone: "08000000009"
-        },
-        {
-          id: 2,
-          name: "Femi Opanuga",
-          email: "femi@gmail.com",
-          phone: "08000000008"
-        },
-        {
-          id: 3,
-          name: "Tosin Okubanjo",
-          email: "tosin@gmail.com",
-          phone: "08000000007"
-        }
-      ],
+      contacts: [],
+      // isLoading: true,
       dispatch: action => this.setState(state =>
         reducer(state, action))
       
     };
   }
+
+ 
+  componentDidMount() {
+    // isLoading();
+     fetch(url)
+      .then(res => res.json())
+      .then(data => this.setState({ contacts: data }));
+    
+  }
+
+//  async componentDidMount() {
+//     // isLoading();
+//    const res = await fetch(url);
+//    const json = await res.json();
+//    this.setState({ contacts: json });
+
+//   }
+ 
+
+
   render() {
     return (
       <Context.Provider value={this.state}>
